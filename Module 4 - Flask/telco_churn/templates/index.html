@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telco Customer Churn Prediction</title>
+</head>
+<body>
+    <h1>Telco Customer Churn Prediction</h1>
+    <form id="predictForm">
+        <label for="model">Select Model:</label>
+        <select id="model">
+            <option value="0">Linear Regression</option>
+            <option value="1">Decision Trees</option>
+            <option value="2">Random Forest</option>
+            <option value="3">Gradient Boosting</option>
+            <option value="4">SVM</option>
+        </select>
+        <br><br>
+        <!-- Add input fields for features here -->
+        <div id="features">
+            <!-- Feature input fields will be dynamically added here -->
+        </div>
+        <button type="button" onclick="predict()">Predict</button>
+    </form>
+    <p id="result"></p>
+
+    <script>
+        const features = [
+            'tenure', 'MonthlyCharges', 'TotalCharges', 'gender_Female', 'gender_Male', 
+            'SeniorCitizen_0', 'SeniorCitizen_1', 'Partner_No', 'Partner_Yes', 'Dependents_No', 
+            'Dependents_Yes', 'PhoneService_No', 'PhoneService_Yes', 'MultipleLines_No', 
+            'MultipleLines_Yes', 'InternetService_DSL', 'InternetService_Fiber optic', 
+            'InternetService_No', 'OnlineSecurity_No', 'OnlineSecurity_Yes', 'OnlineBackup_No', 
+            'OnlineBackup_Yes', 'DeviceProtection_No', 'DeviceProtection_Yes', 'TechSupport_No', 
+            'TechSupport_Yes', 'StreamingTV_No', 'StreamingTV_Yes', 'StreamingMovies_No', 
+            'StreamingMovies_Yes', 'Contract_Month-to-month', 'Contract_One year', 'Contract_Two year', 
+            'PaperlessBilling_No', 'PaperlessBilling_Yes', 'PaymentMethod_Bank transfer (automatic)', 
+            'PaymentMethod_Credit card (automatic)', 'PaymentMethod_Electronic check', 'PaymentMethod_Mailed check'
+        ];
+
+        const featureContainer = document.getElementById('features');
+
+        features.forEach(feature => {
+            const div = document.createElement('div');
+            const label = document.createElement('label');
+            label.textContent = feature;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = feature;
+            input.name = feature;
+            div.appendChild(label);
+            div.appendChild(input);
+            featureContainer.appendChild(div);
+            featureContainer.appendChild(document.createElement('br'));
+        });
+
+        function predict() {
+            const modelIndex = document.getElementById('model').value;
+            const featureValues = features.map(feature => parseFloat(document.getElementById(feature).value) || 0);
+
+            const data = {
+                model_index: parseInt(modelIndex),
+                features: featureValues
+            };
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = 'Prediction: ' + data.prediction;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
