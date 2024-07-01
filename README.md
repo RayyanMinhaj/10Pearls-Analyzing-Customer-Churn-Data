@@ -3,7 +3,7 @@
 > People come and go, services stay!
 > 
 
-### What is Churn?
+## What is Churn?
 
 **Telecommunication churn** refers to the phenomenon where customers of a telecom service provider discontinue their service or switch to another provider. Churn can be voluntary (when customers actively choose to switch providers) or involuntary (when customers are disconnected by the provider due to non-payment or other reasons). 
 
